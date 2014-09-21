@@ -1,0 +1,50 @@
+{
+    "name": "cdspuglia/pollo",
+    "type": "project",
+    "description": "Polling system by Club degli Sviluppatori Puglia",
+    "keywords": [
+        "poll"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Club degli Sviluppatori Puglia",
+            "homepage": "https://www.linkedin.com/groups/Club-degli-Sviluppatori-Puglia-5023541"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "aura/cli-kernel": "2.*@dev",
+        "aura/web-kernel": "2.*@dev",
+        "monolog/monolog": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2",
+        "symfony/debug": "~2.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        },
+        "psr-4": {
+            "Pollo\\Config\\": "config/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "aura": {
+            "type": "project",
+            "config": {
+                "common": "Pollo\\Config\\Common",
+                "dev": "Pollo\\Config\\Dev",
+                "test": "Pollo\\Config\\Test",
+                "prod": "Pollo\\Config\\Prod"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
