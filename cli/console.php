@@ -3,10 +3,10 @@
 $path = dirname(__DIR__);
 require "{$path}/vendor/autoload.php";
 
-use Pollo\Application\ConsoleApplication;
-
-$polloConsole = new ConsoleApplication($path);
-$polloConsole->run();
-$status = $polloConsole->getExitStatus();
+$kernel = (new \Aura\Project_Kernel\Factory)->newKernel(
+    $path,
+    'Aura\Cli_Kernel\CliKernel'
+);
+$status = $kernel();
 
 exit($status);

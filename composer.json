@@ -16,10 +16,12 @@
     "require": {
         "aura/cli-kernel": "2.*@dev",
         "aura/web-kernel": "2.*@dev",
-        "monolog/monolog": "1.*"
+        "monolog/monolog": "1.*",
+        "broadway/broadway": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.2",
+        "squizlabs/php_codesniffer": "dev-master",
         "symfony/debug": "~2.5"
     },
     "autoload": {
@@ -27,7 +29,8 @@
             "": "src/"
         },
         "psr-4": {
-            "Pollo\\Config\\": "config/"
+            "Pollo\\Config\\": "config/",
+            "PolloTest\\": "tests/"
         }
     },
     "config": {

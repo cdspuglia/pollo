@@ -1,7 +1,5 @@
 /bin
 /vendor
-
-
 /tmp/cache/*
 /tmp/log/*
 !/tmp/cache/.placeholder
