@@ -32,6 +32,6 @@ abstract class Uuid
             );
         }
 
-        $this->set($uuid);
+        $this->value = (string) $uuid;
     }
 }

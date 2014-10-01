@@ -10,7 +10,7 @@ interface ValueObjectInterface
      * @param  ValueObjectInterface $object
      * @return bool
      */
-    public function sameValueAs(ValueObjectInterface $object);
+    public function sameValueAs($object);
 
     /**
      * Returns a string representation of the object
