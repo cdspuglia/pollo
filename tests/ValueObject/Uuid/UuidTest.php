@@ -35,7 +35,7 @@ class UuidTest extends TestCase
         );
 
         $this->getMockBuilder('Pollo\ValueObject\Uuid\Uuid')
-            ->setConstructorArgs(['1234'])
+            ->setConstructorArgs(array('1234'))
             ->getMockForAbstractClass();
     }
 
@@ -49,12 +49,12 @@ class UuidTest extends TestCase
 
         /** @var Pollo\ValueObject\Uuid\Uuid $uuid */
         $uuid = $this->getMockBuilder('Pollo\ValueObject\Uuid\Uuid')
-            ->setConstructorArgs([$uuidValue])
+            ->setConstructorArgs(array($uuidValue))
             ->getMockForAbstractClass();
 
         /** @var Pollo\ValueObject\Uuid\Uuid $uuid2 */
         $uuid2 = $this->getMockBuilder('Pollo\ValueObject\Uuid\Uuid')
-            ->setConstructorArgs([$uuid2Value])
+            ->setConstructorArgs(array($uuid2Value))
             ->getMockForAbstractClass();
 
         $this->assertEquals($expected, $uuid->sameValueAs($uuid2));
@@ -62,9 +62,9 @@ class UuidTest extends TestCase
 
     public function two_same_value_data_provider()
     {
-        return [
-            ['123e4567-e89b-12d3-a456-426655440000', true],
-            ['123e4567-e89b-12d3-a456-426655441111', false]
-        ];
+        return array(
+            array('123e4567-e89b-12d3-a456-426655440000', true),
+            array('123e4567-e89b-12d3-a456-426655441111', false)
+        );
     }
 }
