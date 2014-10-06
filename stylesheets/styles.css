@@ -211,7 +211,7 @@ footer {
     display:inline;
   }
   
-  header ul {
+  header > ul {
     position:absolute;
     right:50px;
     top:52px;
@@ -241,7 +241,7 @@ footer {
     padding:15px;
   }
   
-  header ul {
+  header > ul {
     display:none;
   }
 }
