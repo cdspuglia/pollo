@@ -13,7 +13,7 @@ use Pollo\Core\Domain\Repository\PollRepository;
  *
  * @package Pollo\Domain\CommandHandler
  */
-class PollCommandHandler extends CommandHandler
+final class PollCommandHandler extends CommandHandler
 {
     /** @var PollRepository */
     private $repository;
