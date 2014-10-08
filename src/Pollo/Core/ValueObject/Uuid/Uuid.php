@@ -21,7 +21,7 @@ abstract class Uuid
     public function __construct($uuid = null)
     {
         if (null == $uuid) {
-            $uuid = UuidGenerator::uuid4();
+            $uuid = UuidGenerator::uuid4()->toString();
         }
 
         $validator = new Uuidv4();
@@ -32,6 +32,6 @@ abstract class Uuid
             );
         }
 
-        $this->value = (string) $uuid;
+        $this->value = $uuid;
     }
 }
