@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Pollo development guidelines</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>Development guidelines</h1>
+
+        <p>Polling system by <a href="http://www.linkedin.com/groups/Club-degli-Sviluppatori-Puglia-5023541">Club degli
+            Sviluppatori Puglia</a></p>
+
+        <p class="view"><a href="https://github.com/cdspuglia/pollo">View the Project on GitHub
+            <small>cdspuglia/pollo</small>
+        </a></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Introducing <strong> Pollo</strong></a></li>
+                <li><a href="contribute.html">How to <strong>Contribute</strong></a></li>
+                <li><a href="development.html">Development <strong>Guidelines</strong></a></li>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <h3>
+            <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span
+                    class="octicon octicon-link"></span></a>Introduction</h3>
+
+        <p>
+            Before rushing into coding for Pollo, take 5 minutes to read these simple rules and explanation;
+            it will save you a lot of time later, when you will dig into the code and open your pull request.
+        </p>
+
+        <h3>Standards and adopted practices</h3>
+        <p>
+            Since different people will work on Pollo, we stick to some simple standards and best practices to
+            make everyone easily read and understand each other code:
+            <ul>
+                <li>PHP 5.5 as major version of the application.</li>
+                <li><a href="http://www.php-fig.org/psr/psr-2/">PSR-2</a> for class naming and code formatting.</li>
+                <li>Every pull request must be supported by unit tests. We mainly use PHPUnit 4 for that.</li>
+                <li>We don't directly commit into master (for those who have permissions). Instead we work on a branch or a fork, then we open a pull request for merging the branch into master.</li>
+                <li>If tests are not green, a pull request cannot be merged. Travis is helping us checking on this.</li>
+            </ul>
+        </p>
+
+        <h3>Architecture</h3>
+        <p>
+            Pollo is made of several main <i>modules</i> which can be seen as sub-projects of the whole application:
+            <ul>
+                <li>
+                    <strong>Core module</strong>: it contains all the business logic, it's event sourced, domain driven designed and respects CQRS principles.
+                </li>
+                <li>
+                    <strong>Web module</strong>: it's our web application, with both frontend and backend.
+                </li>
+                <li>
+                    <strong>HTTP API module</strong>: it allows to interact with Pollo through a REST interface.
+                </li>
+                <li>
+                    <strong>Adapter module</strong>: it behaves like a bridge between the Core and every other modules, translating messages from one to another.
+                </li>
+            </ul>
+        </p>
+
+        <h3>How Core module works</h3>
+        <p>
+            The core module contains all the business logic of the application and it's the place
+            where "actions" are sent in the form of Commands. E.g.:
+            <pre><code>
+namespace Pollo\Core\Domain\Command\Poll;
+
+use Pollo\Core\Domain\Model\Poll\PollId;
+
+final class CreatePoll
+{
+    /** @var PollId */
+    private $pollId;
+
+    /** @var string */
+    private $title;
+
+    /**
+     * @param PollId $id Poll id
+     * @param string $title Poll title
+     */
+    public function __construct(PollId $id, $title)
+    {
+        $this->pollId = $id;
+        $this->title = (string) $title;
+        }
+
+        /**
+        * Get poll id
+        *
+        * @return PollId
+        */
+        public function getPollId()
+        {
+            return $this->pollId;
+        }
+
+        /**
+        * Get poll title
+        *
+        * @return string
+        */
+        public function getTitle()
+        {
+            return $this->title;
+        }
+    }
+}</code></pre>
+
+        Commands are submitted to the proper CommandHandler which, in turn, creates or loads the right AggregateRoot from the repository
+        and call the appropriate method for that Command. E.g.:
+
+        <pre><code>
+namespace Pollo\Core\Domain\CommandHandler;
+
+use Pollo\Core\Domain\Command\Poll\CreatePoll;
+use Pollo\Core\Domain\Model\Poll\Poll;
+use Pollo\Core\Domain\Repository\PollRepository;
+
+final class PollCommandHandler extends CommandHandler
+{
+    /** @var PollRepository */
+    private $repository;
+
+    public function __construct(PollRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * @param CreatePoll $command
+     */
+    public function handleCreatePoll(CreatePoll $command)
+    {
+        $id = $command->getPollId();
+        $name = $command->getTitle();
+        $poll = Poll::create($id, $name);
+
+        $this->repository->add($poll);
+    }
+}</code></pre>
+
+        Only AggregateRoots can be manipulated from the outside; manipulating simple Entities and ValueObjects is responsibility of the AggregateRoot only.
+        Internally, AggregateRoots modify their state by applying events. E.g.:
+        <pre><code>
+/**
+ * @param PollCreatedEvent $event
+ */
+protected function applyPollCreatedEvent(PollCreatedEvent $event)
+{
+    $id = $event->getPollId();
+    $title = $event->getTitle();
+
+    $this->id = $id;
+    $this->title = $title;
+    $this->options = array();
+}
+        </code></pre>
+
+        Pollo Core module heavily depends on <a href="https://github.com/qandidate-labs/broadway">Broadway</a>, you can find more documentation about how CQRS and event sourcing is applied on the project github repository.
+        </p>
+
+        <h3>Web module</h3>
+        <p>To be written</p>
+
+        <h3>HTTP API module</h3>
+        <p>To be written</p>
+
+        <h3>Adapter module</h3>
+        <p>To be written</p>
+    </section>
+    <footer>
+        <p>This project is maintained by <a href="https://github.com/cdspuglia">cdspuglia</a></p>
+
+        <p>
+            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a>
+            </small>
+        </p>
+    </footer>
+</div>
+<script src="javascripts/scale.fix.js"></script>
+
+</body>
+</html>
