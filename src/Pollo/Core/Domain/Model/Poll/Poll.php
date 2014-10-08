@@ -71,7 +71,7 @@ final class Poll extends AggregateRoot
     /**
      * Adds a vote to the given numbered option
      *
-     * @param $option_number
+     * @param integer $option_number
      * @throws InvalidOptionNumber
      */
     public function vote($option_number)
