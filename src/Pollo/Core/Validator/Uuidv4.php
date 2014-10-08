@@ -7,7 +7,7 @@ use Rhumsaa\Uuid\Uuid;
 final class Uuidv4 implements ValidatorInterface
 {
     /**
-     * @param $uuid
+     * @param string $uuid
      * @return bool
      */
     public function isSatisfiedBy($uuid)
