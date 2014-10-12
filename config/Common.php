@@ -5,7 +5,6 @@ namespace Pollo\Config;
 use Aura\Di\Config;
 use Aura\Di\Container;
 use Pollo\Config\Routing\Home;
-use Pollo\Config\Routing\Routes;
 
 class Common extends Config
 {
@@ -81,7 +80,7 @@ class Common extends Config
     /**
      * Returns all route collection of the application
      *
-     * @return array
+     * @return Pollo\Config\Routing\RouteCollectionInterface[]
      */
     protected function getRouteCollections()
     {
