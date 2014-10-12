@@ -4,20 +4,27 @@ namespace Pollo\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Pollo\Config\Routing\Home;
+use Pollo\Config\Routing\Routes;
 
 class Common extends Config
 {
     public function define(Container $di)
     {
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
+
+        $di->params['Pollo\Web\Controller\Controller'] = array(
+            'request' => $di->lazyGet('aura/web-kernel:request'),
+            'response' => $di->lazyGet('aura/web-kernel:response'),
+        );
     }
 
     public function modify(Container $di)
     {
         $this->modifyLogger($di);
         $this->modifyCliDispatcher($di);
-        $this->modifyWebRouter($di);
-        $this->modifyWebDispatcher($di);
+
+        $this->registerRoutes($di);
     }
 
     protected function modifyLogger(Container $di)
@@ -50,21 +57,36 @@ class Common extends Config
         );
     }
 
-    public function modifyWebRouter(Container $di)
+    public function registerRoutes(Container $di)
     {
+        $routeCollections = $this->getRouteCollections();
+
+        /** @var Aura\Router\Router $router */
         $router = $di->get('aura/web-kernel:router');
 
-        $router->add('hello', '/')
-               ->setValues(array('action' => 'hello'));
-    }
-
-    public function modifyWebDispatcher($di)
-    {
+        /** @var Aura\Dispatcher\Dispatcher $dispatcher */
         $dispatcher = $di->get('aura/web-kernel:dispatcher');
 
-        $dispatcher->setObject('hello', function () use ($di) {
-            $response = $di->get('aura/web-kernel:response');
-            $response->content->set("Hello World!");
-        });
+        /** @var Pollo\Config\Routing\RouteCollectionInterface $routeCollection */
+        foreach ($routeCollections as $routeCollection) {
+            $routeCollection->addTo($router);
+
+            $actionControllerMap = $routeCollection->getActionControllerMap();
+            foreach ($actionControllerMap as $action => $controller) {
+                $dispatcher->setObject($action, $di->lazyNew($controller));
+            }
+        }
+    }
+
+    /**
+     * Returns all route collection of the application
+     *
+     * @return array
+     */
+    protected function getRouteCollections()
+    {
+        return array(
+            new Home()
+        );
     }
 }
