@@ -1,0 +1,8 @@
+default:
+    extensions:
+        Behat\MinkExtension:
+            base_url:  'http://localhost'
+            goutte: ~
+            selenium2:
+                browser: phantomjs
+                wd_host: "http://127.0.0.1:4444/wd/hub"
