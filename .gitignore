@@ -1,6 +1,9 @@
 /bin
 /vendor
+
 /tmp/cache/*
 /tmp/log/*
 !/tmp/cache/.placeholder
 !/tmp/log/.placeholder
+
+/behat.yml
