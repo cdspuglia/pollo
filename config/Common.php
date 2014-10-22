@@ -12,9 +12,18 @@ class Common extends Config
     {
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
 
+        $di->set('pollo/templating', $di->lazyNew('Pollo\Web\Templating\TwigTemplateEngine', array(
+            'loader' => $di->lazyNew(
+                '\Twig_Loader_Filesystem',
+                array(__DIR__ . '/../src/Pollo/Web/Resources/templates')
+            ),
+            'options' => array('cache' => __DIR__ . '/../tmp/cache/twig')
+        )));
+
         $di->params['Pollo\Web\Controller\Controller'] = array(
             'request' => $di->lazyGet('aura/web-kernel:request'),
             'response' => $di->lazyGet('aura/web-kernel:response'),
+            'templating' => $di->lazyGet('pollo/templating'),
         );
     }
 
