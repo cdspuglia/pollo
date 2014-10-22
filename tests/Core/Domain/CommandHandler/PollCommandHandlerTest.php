@@ -38,6 +38,21 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
     }
 
     /** @test */
+    public function new_poll_with_empty_title_throws_exception()
+    {
+        $this->setExpectedException(
+            'Pollo\Core\Domain\Model\Poll\Exception\InvalidPollTitle',
+            "Invalid poll title ''"
+        );
+
+        $pollId =  new PollId();
+
+        $this->scenario
+            ->withAggregateId($pollId)
+            ->when(new CreatePoll($pollId, ''));
+    }
+
+    /** @test */
     public function new_option_can_be_created()
     {
         $pollId =  new PollId();
