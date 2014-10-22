@@ -8,7 +8,7 @@ final class IndexController extends Controller
 {
     public function __invoke()
     {
-        $content = "<h1>Pollo homepage</h1>";
+        $content = $this->templating->render('Home/index.html.twig');
         $this->response->content->set($content);
     }
 }
