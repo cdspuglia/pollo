@@ -17,7 +17,7 @@ final class Response implements ResponseInterface
     }
 
     /**
-     * @pinheritdoc
+     * @inheritdoc
      */
     public function setContent($content)
     {
