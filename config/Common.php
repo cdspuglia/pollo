@@ -20,9 +20,16 @@ class Common extends Config
             'options' => array('cache' => __DIR__ . '/../tmp/cache/twig')
         )));
 
+        $di->set('pollo/request', $di->lazyNew('Pollo\Web\Http\Request', array(
+            'request' => $di->lazyGet('aura/web-kernel:request')
+        )));
+        $di->set('pollo/response', $di->lazyNew('Pollo\Web\Http\Response', array(
+            'response' => $di->lazyGet('aura/web-kernel:response')
+        )));
+
         $di->params['Pollo\Web\Controller\Controller'] = array(
-            'request' => $di->lazyGet('aura/web-kernel:request'),
-            'response' => $di->lazyGet('aura/web-kernel:response'),
+            'request' => $di->lazyGet('pollo/request'),
+            'response' => $di->lazyGet('pollo/response'),
             'templating' => $di->lazyGet('pollo/templating'),
         );
     }
