@@ -42,4 +42,27 @@ final class OptionCreatedEvent extends Event
     {
         return $this->name;
     }
+
+    /**
+     * @param array $data
+     * @return self
+     */
+    public static function deserialize(array $data)
+    {
+        $pollId = new PollId($data['pollId']);
+        $event = new self($pollId, $data['name']);
+
+        return $event;
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return array(
+            'pollId' => (string) $this->pollId,
+            'name' => $this->name
+        );
+    }
 }

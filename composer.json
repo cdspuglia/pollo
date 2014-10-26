@@ -18,7 +18,8 @@
         "aura/web-kernel": "2.*@dev",
         "monolog/monolog": "1.*",
         "broadway/broadway": "dev-master",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "dbellettini/eventstore-client": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.2",

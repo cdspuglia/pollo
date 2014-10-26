@@ -8,7 +8,10 @@ use PolloTest\TestCase;
 
 class VoteOptionTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function poll_id_is_returned()
     {
         $id = new PollId();
@@ -17,7 +20,10 @@ class VoteOptionTest extends TestCase
         $this->assertSame($id, $command->getPollId());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function option_number_is_returned()
     {
         $id = new PollId();

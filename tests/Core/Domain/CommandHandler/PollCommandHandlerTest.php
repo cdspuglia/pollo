@@ -24,7 +24,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
         return new PollCommandHandler($repository);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function new_poll_can_be_created()
     {
         $id =  new PollId();
@@ -37,7 +40,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
             );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function new_poll_with_empty_title_throws_exception()
     {
         $this->setExpectedException(
@@ -52,7 +58,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
             ->when(new CreatePoll($pollId, ''));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function new_option_can_be_created()
     {
         $pollId =  new PollId();
@@ -68,7 +77,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
             );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function option_with_invalid_name_throws_exception()
     {
         $this->setExpectedException(
@@ -86,7 +98,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
             ->when(new CreateOption($pollId, ''));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function existing_option_can_be_voted()
     {
         $pollId =  new PollId();
@@ -105,7 +120,10 @@ class PollCommandHandlerTest extends CommandHandlerScenarioTestCase
             );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function vote_non_existing_option_throws_exception()
     {
         $this->setExpectedException(

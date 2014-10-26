@@ -6,7 +6,10 @@ use PolloTest\TestCase;
 
 class UuidTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function uuid_value_is_generated()
     {
         $uuid = $this->getMockForAbstractClass('Pollo\Core\ValueObject\Uuid\Uuid');
@@ -15,7 +18,10 @@ class UuidTest extends TestCase
         $this->assertRegExp($pattern, $uuid->__toString());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function passed_uuid_is_retained()
     {
         $uuidValue = '123e4567-e89b-12d3-a456-426655440000';
@@ -26,7 +32,10 @@ class UuidTest extends TestCase
         $this->assertEquals($uuidValue, $uuid->__toString());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function invalid_uuid_throws_exception()
     {
         $this->setExpectedException(
@@ -41,6 +50,7 @@ class UuidTest extends TestCase
 
     /**
      * @test
+     * @group unit
      * @dataProvider two_same_value_data_provider
      */
     public function two_same_value_uuid_are_considered_equal($uuid2Value, $expected)
