@@ -7,7 +7,10 @@ use PolloTest\TestCase;
 
 class IndexControllerTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function response_contains_pollo_homepage()
     {
         $request = $this->getMock('Pollo\Web\Http\RequestInterface');

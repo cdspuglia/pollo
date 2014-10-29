@@ -11,6 +11,7 @@
         >
     <php>
         <env name="AURA_CONFIG_MODE" value="test"/>
+        <env name="EVENTSTORE_URL" value="http://127.0.0.1:2113"/>
     </php>
     <testsuites>
         <testsuite name="Pollo Test Suite">

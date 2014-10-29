@@ -7,7 +7,10 @@ use PolloTest\TestCase;
 
 class Uuidv4Test extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function valid_uuid_returns_true()
     {
         $validator = new Uuidv4();
@@ -16,7 +19,10 @@ class Uuidv4Test extends TestCase
         $this->assertTrue($validator->isSatisfiedBy($validUuid));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group unit
+     */
     public function invalid_uuid_returns_false()
     {
         $validator = new Uuidv4();

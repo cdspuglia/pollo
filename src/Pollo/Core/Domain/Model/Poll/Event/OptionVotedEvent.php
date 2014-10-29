@@ -42,4 +42,27 @@ final class OptionVotedEvent extends Event
     {
         return $this->optionNumber;
     }
+
+    /**
+     * @param array $data
+     * @return self
+     */
+    public static function deserialize(array $data)
+    {
+        $pollId = new PollId($data['pollId']);
+        $event = new self($pollId, $data['optionNumber']);
+
+        return $event;
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return array(
+            'pollId' => (string) $this->pollId,
+            'optionNumber' => $this->optionNumber
+        );
+    }
 }

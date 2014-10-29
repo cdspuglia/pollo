@@ -2,6 +2,8 @@
 
 namespace Pollo\Core\Domain;
 
-abstract class Event
+use Broadway\Serializer\SerializableInterface;
+
+abstract class Event implements SerializableInterface
 {
 }

@@ -42,4 +42,27 @@ final class PollCreatedEvent extends Event
     {
         return $this->title;
     }
+
+    /**
+     * @param array $data
+     * @return self
+     */
+    public static function deserialize(array $data)
+    {
+        $pollId = new PollId($data['pollId']);
+        $event = new self($pollId, $data['title']);
+
+        return $event;
+    }
+
+    /**
+     * @return array
+     */
+    public function serialize()
+    {
+        return array(
+            'pollId' => (string) $this->pollId,
+            'title' => $this->title
+        );
+    }
 }
