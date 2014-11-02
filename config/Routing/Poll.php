@@ -4,19 +4,19 @@ namespace Pollo\Config\Routing;
 
 use Aura\Router\Router;
 
-final class Home implements RouteCollectionInterface
+final class Poll implements RouteCollectionInterface
 {
     /**
-     * Add home route to given router
+     * Add poll routes to given router
      *
      * @param Router $router
      */
     public function addTo(Router $router)
     {
-        $router->addGet('home', '/')
+        $router->addPost('poll.create', '/poll/create')
             ->setValues(
                 array(
-                    'action' => 'home.index'
+                    'action' => 'poll.create'
                 )
             )
             ->setAccept(
@@ -33,7 +33,7 @@ final class Home implements RouteCollectionInterface
     public function getActionControllerMap()
     {
         return array(
-            'home.index' => 'Pollo\Web\Controller\Home\IndexController'
+            'poll.create' => 'Pollo\Web\Controller\Poll\CreateController'
         );
     }
 }

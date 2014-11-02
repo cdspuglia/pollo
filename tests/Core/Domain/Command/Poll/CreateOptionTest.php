@@ -31,4 +31,29 @@ class CreateOptionTest extends TestCase
 
         $this->assertSame('Name', $command->getName());
     }
+
+    /**
+     * @test
+     * @group unit
+     */
+    public function valid_serialized_data_can_be_successfully_deserialized()
+    {
+        $id = new PollId();
+        $serialized = array('pollId' => (string) $id, 'name' => 'Option name');
+
+        $command = CreateOption::deserialize($serialized);
+
+        $this->assertInstanceOf('Pollo\Core\Domain\Command\Poll\CreateOption', $command);
+    }
+
+    /**
+     * @test
+     * @group unit
+     * @expectedException Pollo\Core\Domain\Command\Exception\CannotDeserializeCommand
+     */
+    public function invalid_serialized_data_should_throw_exception()
+    {
+        $serialized = array();
+        CreateOption::deserialize($serialized);
+    }
 }

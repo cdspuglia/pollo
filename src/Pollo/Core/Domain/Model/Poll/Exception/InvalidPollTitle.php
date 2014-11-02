@@ -2,7 +2,9 @@
 
 namespace Pollo\Core\Domain\Model\Poll\Exception;
 
-final class InvalidPollTitle extends \Exception
+use Pollo\Core\Domain\DomainException;
+
+final class InvalidPollTitle extends DomainException
 {
     /**
      * @param string $poll_title

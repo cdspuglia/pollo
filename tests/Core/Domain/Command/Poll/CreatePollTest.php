@@ -31,4 +31,29 @@ class CreatePollTest extends TestCase
 
         $this->assertSame('Title', $command->getTitle());
     }
+
+    /**
+     * @test
+     * @group unit
+     */
+    public function valid_serialized_data_can_be_successfully_deserialized()
+    {
+        $id = new PollId();
+        $serialized = array('pollId' => (string) $id, 'title' => 'Poll title');
+
+        $command = CreatePoll::deserialize($serialized);
+
+        $this->assertInstanceOf('Pollo\Core\Domain\Command\Poll\CreatePoll', $command);
+    }
+
+    /**
+     * @test
+     * @group unit
+     * @expectedException Pollo\Core\Domain\Command\Exception\CannotDeserializeCommand
+     */
+    public function invalid_serialized_data_should_throw_exception()
+    {
+        $serialized = array();
+        CreatePoll::deserialize($serialized);
+    }
 }

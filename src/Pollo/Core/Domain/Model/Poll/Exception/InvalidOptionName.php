@@ -2,7 +2,9 @@
 
 namespace Pollo\Core\Domain\Model\Poll\Exception;
 
-final class InvalidOptionName extends \Exception
+use Pollo\Core\Domain\DomainException;
+
+final class InvalidOptionName extends DomainException
 {
     /**
      * @param string $option_name
