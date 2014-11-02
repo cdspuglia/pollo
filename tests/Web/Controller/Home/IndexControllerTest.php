@@ -3,9 +3,9 @@
 namespace PolloTest\Web\Controller\Home;
 
 use Pollo\Web\Controller\Home\IndexController;
-use PolloTest\TestCase;
+use PolloTest\WebControllerTestCase;
 
-class IndexControllerTest extends TestCase
+class IndexControllerTest extends WebControllerTestCase
 {
     /**
      * @test
@@ -13,20 +13,24 @@ class IndexControllerTest extends TestCase
      */
     public function response_contains_pollo_homepage()
     {
-        $request = $this->getMock('Pollo\Web\Http\RequestInterface');
-        $response = $this->getMock('Pollo\Web\Http\ResponseInterface');
-        $templating = $this->getMock('Pollo\Web\Templating\TemplateEngineInterface');
+        $args = $this->getMockedArguments();
 
-        $response
+        $args['response']
             ->expects($this->once())
             ->method('setContent')
             ->with($this->stringContains('Pollo homepage'));
 
-        $templating
+        $args['templating']
             ->method('render')
             ->willReturn('<h1>Pollo homepage</h1>');
 
-        $controller = new IndexController($request, $response, $templating);
+        $controller = new IndexController(
+            $args['request'],
+            $args['response'],
+            $args['templating'],
+            $args['domain']
+        );
+
         $controller->__invoke();
     }
 }

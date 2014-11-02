@@ -5,14 +5,18 @@ namespace Pollo\Config;
 use Aura\Di\Config;
 use Aura\Di\Container;
 use Pollo\Config\Routing\Home;
+use Pollo\Config\Routing\Poll;
+use Pollo\Core\Domain\CommandHandler\PollCommandHandler;
 
 class Common extends Config
 {
     public function define(Container $di)
     {
+        // Logger
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
 
-        $di->set('pollo/templating', $di->lazyNew('Pollo\Web\Templating\TwigTemplateEngine', array(
+        // Template engine
+        $di->set('pollo/web:templating', $di->lazyNew('Pollo\Web\Templating\TwigTemplateEngine', array(
             'loader' => $di->lazyNew(
                 '\Twig_Loader_Filesystem',
                 array(__DIR__ . '/../src/Pollo/Web/Resources/templates')
@@ -20,18 +24,49 @@ class Common extends Config
             'options' => array('cache' => __DIR__ . '/../tmp/cache/twig')
         )));
 
-        $di->set('pollo/request', $di->lazyNew('Pollo\Web\Http\Request', array(
+        // Web request / response
+        $di->set('pollo/web:request', $di->lazyNew('Pollo\Web\Http\Request', array(
             'request' => $di->lazyGet('aura/web-kernel:request')
         )));
-        $di->set('pollo/response', $di->lazyNew('Pollo\Web\Http\Response', array(
+        $di->set('pollo/web:response', $di->lazyNew('Pollo\Web\Http\Response', array(
             'response' => $di->lazyGet('aura/web-kernel:response')
         )));
 
+        // Command bus
+        $di->set('pollo/command-bus', $di->lazyNew('Broadway\CommandHandling\SimpleCommandBus'));
+
+        // Web/Domain adapter
+        $di->set('pollo/adapter:web-domain-adapter', $di->lazyNew('Pollo\Adapter\WebDomainAdapter', array(
+            'bus' => $di->lazyGet('pollo/command-bus'),
+            'mapper' => $di->lazyNew('Pollo\Adapter\Mapper\WebCommandMapper')
+        )));
+
+        // Web controller parameters
         $di->params['Pollo\Web\Controller\Controller'] = array(
-            'request' => $di->lazyGet('pollo/request'),
-            'response' => $di->lazyGet('pollo/response'),
-            'templating' => $di->lazyGet('pollo/templating'),
+            'request' => $di->lazyGet('pollo/web:request'),
+            'response' => $di->lazyGet('pollo/web:response'),
+            'templating' => $di->lazyGet('pollo/web:templating'),
+            'domain' => $di->lazyGet('pollo/adapter:web-domain-adapter')
         );
+
+        // EventStore client
+        $di->set('pollo/event-store-client', $di->lazyNew('EventStore\EventStore', array(
+            'url' => 'http://127.0.0.1:2113'
+        )));
+
+        // Event store
+        $di->set('pollo/core:event-store', $di->lazyNew('Pollo\Core\EventStore\EventStore', array(
+            'eventStore' => $di->lazyGet('pollo/event-store-client')
+        )));
+
+        // Event publisher
+        $di->set('pollo/core:event-bus', $di->lazyNew('Broadway\EventHandling\SimpleEventBus'));
+
+        // Domain repositories
+        $di->set('pollo/core:poll-repository', $di->lazyNew('Pollo\Core\Domain\Repository\PollRepository', array(
+            'eventStore' => $di->lazyGet('pollo/core:event-store'),
+            'eventBus' => $di->lazyGet('pollo/core:event-bus')
+        )));
     }
 
     public function modify(Container $di)
@@ -40,6 +75,7 @@ class Common extends Config
         $this->modifyCliDispatcher($di);
 
         $this->registerRoutes($di);
+        $this->registerCommandHandlers($di);
     }
 
     protected function modifyLogger(Container $di)
@@ -72,7 +108,7 @@ class Common extends Config
         );
     }
 
-    public function registerRoutes(Container $di)
+    protected function registerRoutes(Container $di)
     {
         $routeCollections = $this->getRouteCollections();
 
@@ -101,7 +137,28 @@ class Common extends Config
     protected function getRouteCollections()
     {
         return array(
-            new Home()
+            new Home(),
+            new Poll()
+        );
+    }
+
+    protected function registerCommandHandlers(Container $di)
+    {
+        $map = $this->getCommandHandlerRepositoryServiceMap();
+        $bus = $di->get('pollo/command-bus');
+
+        foreach ($map as $handlerClass => $repositoryService) {
+            $repository = $di->get($repositoryService);
+            $handler = new $handlerClass($repository);
+            $bus->subscribe($handler);
+        }
+    }
+
+    protected function getCommandHandlerRepositoryServiceMap()
+    {
+        return array(
+            'Pollo\Core\Domain\CommandHandler\PollCommandHandler'
+                => 'pollo/core:poll-repository'
         );
     }
 }
