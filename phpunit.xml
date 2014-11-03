@@ -7,8 +7,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-        >
+         syntaxCheck="false">
     <php>
         <env name="AURA_CONFIG_MODE" value="test"/>
         <env name="EVENTSTORE_URL" value="http://127.0.0.1:2113"/>
@@ -19,7 +18,8 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
+        <whitelist addUncoveredFilesFromWhitelist="true"
+                   processUncoveredFilesFromWhitelist="true">
             <directory>./src/</directory>
         </whitelist>
     </filter>
