@@ -3,6 +3,7 @@
 namespace Pollo\Config\Routing;
 
 use Aura\Router\Router;
+use Rhumsaa\Uuid\Uuid;
 
 final class Poll implements RouteCollectionInterface
 {
@@ -13,12 +14,18 @@ final class Poll implements RouteCollectionInterface
      */
     public function addTo(Router $router)
     {
-        $router->addPost('poll.create', '/poll/create')
-            ->setValues(
+        $router->addGet('poll.get', '/poll/{id}')
+            ->setValues(array('action' => 'poll.get'))
+            ->addTokens(array('id' => Uuid::VALID_PATTERN))
+            ->setAccept(
                 array(
-                    'action' => 'poll.create'
+                    'application/json',
+                    'text/html'
                 )
-            )
+            );
+
+        $router->addPost('poll.create', '/poll/create')
+            ->setValues(array('action' => 'poll.create'))
             ->setAccept(
                 array(
                     'application/json',
@@ -33,6 +40,7 @@ final class Poll implements RouteCollectionInterface
     public function getActionControllerMap()
     {
         return array(
+            'poll.get' => 'Pollo\Web\Controller\Poll\GetController',
             'poll.create' => 'Pollo\Web\Controller\Poll\CreateController'
         );
     }
