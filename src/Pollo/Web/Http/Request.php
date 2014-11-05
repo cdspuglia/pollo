@@ -16,4 +16,20 @@ final class Request implements RequestInterface
     {
         $this->request = $request;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getQuery($key, $alt = null)
+    {
+        return $this->request->query->get($key, $alt);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPost($key, $alt = null)
+    {
+        return $this->request->post->get($key, $alt);
+    }
 }

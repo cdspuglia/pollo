@@ -6,7 +6,6 @@ use Aura\Di\Config;
 use Aura\Di\Container;
 use Pollo\Config\Routing\Home;
 use Pollo\Config\Routing\Poll;
-use Pollo\Core\Domain\CommandHandler\PollCommandHandler;
 
 class Common extends Config
 {
@@ -32,6 +31,11 @@ class Common extends Config
             'response' => $di->lazyGet('aura/web-kernel:response')
         )));
 
+        // Router
+        $di->set('pollo/web:router', $di->lazyNew('Pollo\Web\Router\Router', array(
+            'router' => $di->lazyGet('aura/web-kernel:router')
+        )));
+
         // Command bus
         $di->set('pollo/command-bus', $di->lazyNew('Broadway\CommandHandling\SimpleCommandBus'));
 
@@ -46,6 +50,7 @@ class Common extends Config
             'request' => $di->lazyGet('pollo/web:request'),
             'response' => $di->lazyGet('pollo/web:response'),
             'templating' => $di->lazyGet('pollo/web:templating'),
+            'router' => $di->lazyGet('pollo/web:router'),
             'domain' => $di->lazyGet('pollo/adapter:web-domain-adapter')
         );
 
@@ -112,13 +117,13 @@ class Common extends Config
     {
         $routeCollections = $this->getRouteCollections();
 
-        /** @var Aura\Router\Router $router */
+        /** @var \Aura\Router\Router $router */
         $router = $di->get('aura/web-kernel:router');
 
-        /** @var Aura\Dispatcher\Dispatcher $dispatcher */
+        /** @var \Aura\Dispatcher\Dispatcher $dispatcher */
         $dispatcher = $di->get('aura/web-kernel:dispatcher');
 
-        /** @var Pollo\Config\Routing\RouteCollectionInterface $routeCollection */
+        /** @var \Pollo\Config\Routing\RouteCollectionInterface $routeCollection */
         foreach ($routeCollections as $routeCollection) {
             $routeCollection->addTo($router);
 
@@ -132,7 +137,7 @@ class Common extends Config
     /**
      * Returns all route collection of the application
      *
-     * @return Pollo\Config\Routing\RouteCollectionInterface[]
+     * @return \Pollo\Config\Routing\RouteCollectionInterface[]
      */
     protected function getRouteCollections()
     {

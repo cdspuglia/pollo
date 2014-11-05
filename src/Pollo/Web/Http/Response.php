@@ -23,4 +23,22 @@ final class Response implements ResponseInterface
     {
         $this->response->content->set($content);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatusCode($code)
+    {
+        $this->response->status->setCode($code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setHeaders(array $headers)
+    {
+        foreach ($headers as $headerName => $headerValue) {
+            $this->response->headers->set($headerName, $headerValue);
+        }
+    }
 }

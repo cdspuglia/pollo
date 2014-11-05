@@ -11,5 +11,5 @@ interface TemplateEngineInterface
      * @param array $params
      * @return string
      */
-    public function render($template_name, array $params = null);
+    public function render($template_name, array $params = array());
 }

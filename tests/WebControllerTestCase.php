@@ -15,6 +15,7 @@ abstract class WebControllerTestCase extends TestCase
             'request' => $this->getMock('Pollo\Web\Http\RequestInterface'),
             'response' => $this->getMock('Pollo\Web\Http\ResponseInterface'),
             'templating' => $this->getMock('Pollo\Web\Templating\TemplateEngineInterface'),
+            'router' => $this->getMock('Pollo\Web\Router\RouterInterface'),
             'domain' => $this->getMock('Pollo\Adapter\AdapterInterface')
         );
     }

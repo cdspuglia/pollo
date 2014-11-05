@@ -28,6 +28,7 @@ class IndexControllerTest extends WebControllerTestCase
             $args['request'],
             $args['response'],
             $args['templating'],
+            $args['router'],
             $args['domain']
         );
 
