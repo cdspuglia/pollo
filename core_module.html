@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Core module - Pollo development guidelines</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>Development guidelines / Core module</h1>
+
+        <p>Polling system by <a href="http://www.linkedin.com/groups/Club-degli-Sviluppatori-Puglia-5023541">Club degli
+            Sviluppatori Puglia</a></p>
+
+        <p class="view"><a href="https://github.com/cdspuglia/pollo">View the Project on GitHub
+            <small>cdspuglia/pollo</small>
+        </a></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Introducing <strong> Pollo</strong></a></li>
+                <li><a href="contribute.html">How to <strong>Contribute</strong></a></li>
+                <li><a href="development.html">Development <strong>Guidelines</strong></a></li>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <h3>How Core module works</h3>
+        <p>
+            The core module contains all the business logic of the application and it's the place
+            where "actions" are sent in the form of Commands. E.g.:
+            <pre><code>
+namespace Pollo\Core\Domain\Command\Poll;
+
+use Pollo\Core\Domain\Model\Poll\PollId;
+
+final class CreatePoll
+{
+    /** @var PollId */
+    private $pollId;
+
+    /** @var string */
+    private $title;
+
+    /**
+     * @param PollId $id Poll id
+     * @param string $title Poll title
+     */
+    public function __construct(PollId $id, $title)
+    {
+        $this->pollId = $id;
+        $this->title = (string) $title;
+        }
+
+        /**
+        * Get poll id
+        *
+        * @return PollId
+        */
+        public function getPollId()
+        {
+            return $this->pollId;
+        }
+
+        /**
+        * Get poll title
+        *
+        * @return string
+        */
+        public function getTitle()
+        {
+            return $this->title;
+        }
+    }
+}</code></pre>
+
+        Commands are submitted to the proper CommandHandler which, in turn, creates or loads the right AggregateRoot from the repository
+        and call the appropriate method for that Command. E.g.:
+
+        <pre><code>
+namespace Pollo\Core\Domain\CommandHandler;
+
+use Pollo\Core\Domain\Command\Poll\CreatePoll;
+use Pollo\Core\Domain\Model\Poll\Poll;
+use Pollo\Core\Domain\Repository\PollRepository;
+
+final class PollCommandHandler extends CommandHandler
+{
+    /** @var PollRepository */
+    private $repository;
+
+    public function __construct(PollRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * @param CreatePoll $command
+     */
+    public function handleCreatePoll(CreatePoll $command)
+    {
+        $id = $command->getPollId();
+        $name = $command->getTitle();
+        $poll = Poll::create($id, $name);
+
+        $this->repository->add($poll);
+    }
+}</code></pre>
+
+        Only AggregateRoots can be manipulated from the outside; manipulating simple Entities and ValueObjects is responsibility of the AggregateRoot only.
+        Internally, AggregateRoots modify their state by applying events. E.g.:
+        <pre><code>
+/**
+ * @param PollCreatedEvent $event
+ */
+protected function applyPollCreatedEvent(PollCreatedEvent $event)
+{
+    $id = $event->getPollId();
+    $title = $event->getTitle();
+
+    $this->id = $id;
+    $this->title = $title;
+    $this->options = array();
+}
+        </code></pre>
+
+        Pollo Core module heavily depends on <a href="https://github.com/qandidate-labs/broadway">Broadway</a>, you can find more documentation about how CQRS and event sourcing is applied on the project github repository.
+        </p>
+    </section>
+    <footer>
+        <p>This project is maintained by <a href="https://github.com/cdspuglia">cdspuglia</a></p>
+
+        <p>
+            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a>
+            </small>
+        </p>
+    </footer>
+</div>
+<script src="javascripts/scale.fix.js"></script>
+
+</body>
+</html>

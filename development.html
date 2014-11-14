@@ -32,13 +32,53 @@
         </nav>
     </header>
     <section>
-        <h3>
-            <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span
-                    class="octicon octicon-link"></span></a>Introduction</h3>
+        <h3>Introduction</h3>
 
         <p>
-            Before rushing into coding for Pollo, take 5 minutes to read these simple rules and explanation;
+            Before rushing into coding for Pollo, take 5 minutes to setup your environment read these simple rules and explanation;
             it will save you a lot of time later, when you will dig into the code and open your pull request.
+        </p>
+
+        <h3>Getting ready</h3>
+
+        <p>
+            Assuming that you have git and PHP 5.4+ installed, clone the repository and run composer:
+            <pre><code>$ git clone https://github.com/cdspuglia/pollo.git
+$ cd pollo
+$ curl http://getcomposer.org/composer.phar > composer.phar
+$ php composer.phar install
+</code></pre>
+        </p>
+
+        <p>
+            Pollo use <a href="http://geteventstore.com">EventStore</a> for storing events, so download it and start it from another command line session:
+            <pre><code>$ wget http://download.geteventstore.com/binaries/EventStore-OSS-Linux-v3.0.1.tar.gz
+$ tar xf EventStore*.tar.gz
+$ cd EventStore* && ./clusternode --mem-db 2>&1> eventstore.log &
+            </code></pre>
+        </p>
+
+        <p>
+            Pollo has also an acceptance test suite based on <a href="http://behat.org">Behat</a> and <a href="http://phantomjs.org/">PhantomJS</a>.
+            You will need to run the PhantomJS daemon too for the tests to be correctly executed:
+            <pre><code>$ phantomjs --webdriver=4444</code></pre>
+        </p>
+
+        <p>
+            Add pollo.local to your hosts file:
+            <pre><code>127.0.0.1 pollo.local</code></pre>
+        </p>
+
+        <p>
+            Launch the PHP built-in server from your project folder:
+            <pre><code>$ php -S pollo.local:8000 -t web/</code></pre>
+        </p>
+
+        <p>
+            Finally, you can browse to <a href="http://pollo.local:8000">http://pollo.local:8000</a> and check that the homepage is correctly loaded.
+            Also, you can run the whole test suite with
+        <pre><code>$ bin/phpunit
+$ bin/behat</code></pre>
         </p>
 
         <h3>Standards and adopted practices</h3>
@@ -64,10 +104,7 @@
                     <strong>Core module</strong>: it contains all the business logic, it's event sourced, domain driven designed and respects CQRS principles.
                 </li>
                 <li>
-                    <strong>Web module</strong>: it's our web application, with both frontend and backend.
-                </li>
-                <li>
-                    <strong>HTTP API module</strong>: it allows to interact with Pollo through a REST interface.
+                    <strong>Web module</strong>: it's our web application, with frontend, backend and REST API.
                 </li>
                 <li>
                     <strong>Adapter module</strong>: it behaves like a bridge between the Core and every other modules, translating messages from one to another.
@@ -75,116 +112,15 @@
             </ul>
         </p>
 
-        <h3>How Core module works</h3>
+        <h3>Further documentation</h3>
         <p>
-            The core module contains all the business logic of the application and it's the place
-            where "actions" are sent in the form of Commands. E.g.:
-            <pre><code>
-namespace Pollo\Core\Domain\Command\Poll;
-
-use Pollo\Core\Domain\Model\Poll\PollId;
-
-final class CreatePoll
-{
-    /** @var PollId */
-    private $pollId;
-
-    /** @var string */
-    private $title;
-
-    /**
-     * @param PollId $id Poll id
-     * @param string $title Poll title
-     */
-    public function __construct(PollId $id, $title)
-    {
-        $this->pollId = $id;
-        $this->title = (string) $title;
-        }
-
-        /**
-        * Get poll id
-        *
-        * @return PollId
-        */
-        public function getPollId()
-        {
-            return $this->pollId;
-        }
-
-        /**
-        * Get poll title
-        *
-        * @return string
-        */
-        public function getTitle()
-        {
-            return $this->title;
-        }
-    }
-}</code></pre>
-
-        Commands are submitted to the proper CommandHandler which, in turn, creates or loads the right AggregateRoot from the repository
-        and call the appropriate method for that Command. E.g.:
-
-        <pre><code>
-namespace Pollo\Core\Domain\CommandHandler;
-
-use Pollo\Core\Domain\Command\Poll\CreatePoll;
-use Pollo\Core\Domain\Model\Poll\Poll;
-use Pollo\Core\Domain\Repository\PollRepository;
-
-final class PollCommandHandler extends CommandHandler
-{
-    /** @var PollRepository */
-    private $repository;
-
-    public function __construct(PollRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    /**
-     * @param CreatePoll $command
-     */
-    public function handleCreatePoll(CreatePoll $command)
-    {
-        $id = $command->getPollId();
-        $name = $command->getTitle();
-        $poll = Poll::create($id, $name);
-
-        $this->repository->add($poll);
-    }
-}</code></pre>
-
-        Only AggregateRoots can be manipulated from the outside; manipulating simple Entities and ValueObjects is responsibility of the AggregateRoot only.
-        Internally, AggregateRoots modify their state by applying events. E.g.:
-        <pre><code>
-/**
- * @param PollCreatedEvent $event
- */
-protected function applyPollCreatedEvent(PollCreatedEvent $event)
-{
-    $id = $event->getPollId();
-    $title = $event->getTitle();
-
-    $this->id = $id;
-    $this->title = $title;
-    $this->options = array();
-}
-        </code></pre>
-
-        Pollo Core module heavily depends on <a href="https://github.com/qandidate-labs/broadway">Broadway</a>, you can find more documentation about how CQRS and event sourcing is applied on the project github repository.
+            You can find the documentation for specific modules and arguments here:
+            <ul>
+                <li>
+                    <a href="core_module.html">Core module</a>
+                </li>
+            </ul>
         </p>
-
-        <h3>Web module</h3>
-        <p>To be written</p>
-
-        <h3>HTTP API module</h3>
-        <p>To be written</p>
-
-        <h3>Adapter module</h3>
-        <p>To be written</p>
     </section>
     <footer>
         <p>This project is maintained by <a href="https://github.com/cdspuglia">cdspuglia</a></p>
