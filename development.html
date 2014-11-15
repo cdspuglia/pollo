@@ -71,11 +71,11 @@ $ cd EventStore* && ./clusternode --mem-db 2>&1> eventstore.log &
 
         <p>
             Launch the PHP built-in server from your project folder:
-            <pre><code>$ php -S pollo.local:8000 -t web/</code></pre>
+            <pre><code>$ sudo php -S pollo.local:80 -t web/</code></pre>
         </p>
 
         <p>
-            Finally, you can browse to <a href="http://pollo.local:8000">http://pollo.local:8000</a> and check that the homepage is correctly loaded.
+            Finally, you can browse to <a href="http://pollo.local">http://pollo.local</a> and check that the homepage is correctly loaded.
             Also, you can run the whole test suite with
         <pre><code>$ bin/phpunit
 $ bin/behat</code></pre>
