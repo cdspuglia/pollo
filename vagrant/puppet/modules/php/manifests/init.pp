@@ -1,7 +1,7 @@
 class php {
 
-# Install the php5-fpm and php5-cli packages
-  package { ['php5-fpm', 'php5-cli']:
+# Install php5 packages
+  package { ['php5-fpm', 'php5-cli', 'php5-curl']:
     ensure => present,
     require => Exec['apt-get update'],
   }
@@ -10,5 +10,15 @@ class php {
   service { 'php5-fpm':
     ensure => running,
     require => Package['php5-fpm'],
+  }
+
+# Install composer globally
+  exec { 'install-composer':
+    creates => '/usr/bin/composer',
+    cwd     => '/tmp',
+    user    => root,
+    path    => ['/usr/bin', '/bin'],
+    command => 'wget http://getcomposer.org/composer.phar && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer',
+    require => Package['php5-cli'],
   }
 }

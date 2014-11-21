@@ -17,4 +17,4 @@ exec { 'add-pollo-host':
   path => ['/bin'];
 }
 
-include nginx, php, eventstore
+include git, nginx, php, eventstore
