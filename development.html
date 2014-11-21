@@ -39,10 +39,24 @@
             it will save you a lot of time later, when you will dig into the code and open your pull request.
         </p>
 
-        <h3>Getting ready</h3>
+        <h3>Getting started</h3>
 
         <p>
-            Assuming that you have git and PHP 5.4+ installed, clone the repository and run composer:
+            Pollo comes with a useful pre-configured vagrant VM, so you can start developing in no-time;
+            just add the following line to your hosts file in your host machine:
+        <pre><code>192.168.98.101 pollo.local</code></pre>
+        </p>
+
+        <p>
+            Then start up and enter the VM with the following commands:
+        <pre><code>$ cd vagrant
+$ vagrant up
+$ vagrant ssh</code></pre>
+        </p>
+
+        <p>
+            If you don't want or can't use the vagrant VM, you can setup your machine like this:<br />
+            assuming that you have git and PHP 5.4+ installed, clone the repository and run composer:
             <pre><code>$ git clone https://github.com/cdspuglia/pollo.git
 $ cd pollo
 $ curl http://getcomposer.org/composer.phar > composer.phar
