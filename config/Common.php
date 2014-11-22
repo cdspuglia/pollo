@@ -14,15 +14,6 @@ class Common extends Config
         // Logger
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
 
-        // Template engine
-        $di->set('pollo/web:templating', $di->lazyNew('Pollo\Web\Templating\TwigTemplateEngine', array(
-            'loader' => $di->lazyNew(
-                '\Twig_Loader_Filesystem',
-                array(__DIR__ . '/../src/Pollo/Web/Resources/templates')
-            ),
-            'options' => array('cache' => __DIR__ . '/../tmp/cache/twig')
-        )));
-
         // Web request / response
         $di->set('pollo/web:request', $di->lazyNew('Pollo\Web\Http\Request', array(
             'request' => $di->lazyGet('aura/web-kernel:request')
