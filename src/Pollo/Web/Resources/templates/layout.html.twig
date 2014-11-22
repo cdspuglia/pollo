@@ -5,6 +5,7 @@
     <link href="/assets/bower_components/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
     <link href="/assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
+    <link href="/assets/css/layout.css" rel="stylesheet">
 </head>
 
 <body>
@@ -13,12 +14,11 @@
 
 <div class="container">
 
-    <!-- Your site -->
-
     <div id="content">{% block content %}{% endblock %}</div>
 
-    <!-- Your site ends -->
 </div>
+
+{% include "Partials/actionbar.html.twig" %}
 
 {% include "Partials/footer.html.twig" %}
 <script>
