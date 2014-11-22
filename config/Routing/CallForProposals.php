@@ -13,7 +13,7 @@ final class CallForProposals implements RouteCollectionInterface
      */
     public function addTo(Router $router)
     {
-        $router->addGet('poll.get', '/call-for-proposals/create')
+        $router->addGet('call-for-proposals.get', '/call-for-proposals/create')
             ->setValues(array('action' => 'call-for-proposals.get'))
             ->setAccept(
                 array(
