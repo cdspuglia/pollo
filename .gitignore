@@ -6,7 +6,7 @@ EventStore-*/
 composer.lock
 composer.phar
 
-bower_components/
+web/assets/bower_components/
 
 /bin
 /vendor
