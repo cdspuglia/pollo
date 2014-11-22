@@ -9,3 +9,4 @@
 /behat.yml
 
 /vagrant/.vagrant
+composer.lock
