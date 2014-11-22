@@ -78,14 +78,13 @@ class WebDomainAdapterTest extends TestCase
      */
     public function domain_exception_should_be_converted_to_adapter_exception()
     {
-        $domainException = $this->getMock('Pollo\Core\Domain\DomainException');
+        $domainException = $this->getMockForAbstractClass('Pollo\Core\Domain\DomainException');
+
         $this->commandBus
             ->method('dispatch')
             ->will($this->throwException($domainException));
 
-        $domainCommand = new TestDomainCommand();
-        $domainClass = get_class($domainCommand);
-
+        $domainClass = TestDomainCommand::class;
         $this->mapper
             ->method('map')
             ->will($this->returnValue($domainClass));

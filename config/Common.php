@@ -6,6 +6,8 @@ use Aura\Di\Config;
 use Aura\Di\Container;
 use Pollo\Config\Routing\Home;
 use Pollo\Config\Routing\Poll;
+use Pollo\Core\ReadModel\Projector\PollProjector;
+use Pollo\Core\ReadModel\Repository\PollRepository;
 
 class Common extends Config
 {
@@ -72,6 +74,26 @@ class Common extends Config
             'eventStore' => $di->lazyGet('pollo/core:event-store'),
             'eventBus' => $di->lazyGet('pollo/core:event-bus')
         )));
+
+        // Elastic search client
+        $di->set('pollo/elasticsearch-client', $di->lazyNew('ElasticSearch\Client'));
+
+        // Serializer
+        $di->set('pollo/core:serializer', $di->lazyNew('Pollo\Core\Serializer\Serializer'));
+
+        // Read model repository factory
+        $di->set(
+            'pollo/core/read-model:repository-factory',
+            $di->lazyNew('Pollo\Core\ReadModel\Repository\RepositoryFactory', array(
+                'client' => $di->lazyGet('pollo/elasticsearch-client'),
+                'serializer' => $di->lazyGet('pollo/core:serializer')
+            ))
+        );
+
+        // Read model projectors
+        $di->set('pollo/core/read-model:poll-projector', $di->lazyNew('Pollo\Core\ReadModel\Projector\PollProjector', array(
+            'factory' => $di->lazyGet('pollo/core/read-model:repository-factory')
+        )));
     }
 
     public function modify(Container $di)
@@ -81,6 +103,7 @@ class Common extends Config
 
         $this->registerRoutes($di);
         $this->registerCommandHandlers($di);
+        $this->registerProjectors($di);
     }
 
     protected function modifyLogger(Container $di)
@@ -159,11 +182,32 @@ class Common extends Config
         }
     }
 
+    protected function registerProjectors($di)
+    {
+        $projectorRepositoryMap = $this->getProjectorRepositoryMap();
+        $eventBus = $di->get('pollo/core:event-bus');
+        $factory = $di->get('pollo/core/read-model:repository-factory');
+
+        foreach ($projectorRepositoryMap as $projector => $repositoryClass) {
+            $repositoryName = $repositoryClass::getName();
+            $repository = $factory->create($repositoryName, $repositoryClass);
+            $projector = new PollProjector($repository);
+            $eventBus->subscribe($projector);
+        }
+    }
+
     protected function getCommandHandlerRepositoryServiceMap()
     {
         return array(
             'Pollo\Core\Domain\CommandHandler\PollCommandHandler'
                 => 'pollo/core:poll-repository'
+        );
+    }
+
+    protected function getProjectorRepositoryMap()
+    {
+        return array(
+            'pollo/core/read-model:poll-projector' => PollRepository::class
         );
     }
 }
