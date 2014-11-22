@@ -3,9 +3,8 @@
 namespace Pollo\Config\Routing;
 
 use Aura\Router\Router;
-use Rhumsaa\Uuid\Uuid;
 
-final class Poll implements RouteCollectionInterface
+final class CallForProposals implements RouteCollectionInterface
 {
     /**
      * Add poll routes to given router
@@ -14,8 +13,8 @@ final class Poll implements RouteCollectionInterface
      */
     public function addTo(Router $router)
     {
-        $router->addGet('poll.get', '/poll/create')
-            ->setValues(array('action' => 'poll.get'))
+        $router->addGet('call-for-proposals.get', '/call-for-proposals/create')
+            ->setValues(array('action' => 'call-for-proposals.get'))
             ->setAccept(
                 array(
                     'text/html'
@@ -29,7 +28,7 @@ final class Poll implements RouteCollectionInterface
     public function getActionControllerMap()
     {
         return array(
-            'poll.get' => 'Pollo\Web\Controller\Poll\GetCreateFormController',
+            'call-for-proposals.get' => 'Pollo\Web\Controller\CallForProposals\GetCreateFormController',
         );
     }
 }

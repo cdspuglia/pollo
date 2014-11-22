@@ -1,0 +1,66 @@
+{% extends "layout.html.twig" %}
+
+
+
+{% block content %}
+<h1>Nuova Poll</h1>
+<div class="well bs-component">
+	<form class="form-horizontal" method="post">
+	    <fieldset>
+	        <div class="form-group">
+	            <label for="title" class="col-lg-2 control-label">Titolo</label>
+	            <div class="col-lg-10">
+	                <input type="text" class="form-control" id="title" name="title">
+	            </div>
+	        </div>
+	        <div class="form-group">
+	            <label for="description" class="col-lg-2 control-label">Descrizione</label>
+	            <div class="col-lg-10">
+	                <textarea class="form-control" style="max-width:100%;" rows="3" id="description" name="description"></textarea>
+	            </div>
+	        </div>
+
+
+
+            <div class="form-group">
+            	<label for="datetimepicker1" class="col-lg-2 control-label">Data di scadenza</label>
+                <div class='col-lg-10  input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>	
+
+
+	        <div class="form-group">
+	            <label for="option1" class="col-lg-2 control-label">Opzione 1</label>
+	            <div class="col-lg-10">
+	                <input type="text" class="form-control" id="option1" name="opzioni[]">
+	            </div>
+	        </div>
+
+	        <div class="form-group">
+	            <label for="option2" class="col-lg-2 control-label">Opzione 2</label>
+	            <div class="col-lg-10">
+	                <input type="text" class="form-control" id="option2" name="opzioni[]">
+	            </div>
+	        </div>
+	        
+	        <div class="form-group">
+	            <div class="col-lg-10 col-lg-offset-2">
+	                <button class="btn btn-default">Annulla</button>
+	                <button type="submit" class="btn btn-primary">Inserisci</button>
+	            </div>
+	        </div>
+
+	    </fieldset>
+	</form>
+</div>
+
+
+{% endblock %}
+
+
+{% block jsToExecuteOnDocumentReady %}
+	$('#datetimepicker1').datetimepicker();
+{% endblock %}

@@ -4,6 +4,7 @@ namespace Pollo\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Pollo\Config\Routing\CallForProposals;
 use Pollo\Config\Routing\Home;
 use Pollo\Config\Routing\Poll;
 
@@ -13,15 +14,6 @@ class Common extends Config
     {
         // Logger
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
-
-        // Template engine
-        $di->set('pollo/web:templating', $di->lazyNew('Pollo\Web\Templating\TwigTemplateEngine', array(
-            'loader' => $di->lazyNew(
-                '\Twig_Loader_Filesystem',
-                array(__DIR__ . '/../src/Pollo/Web/Resources/templates')
-            ),
-            'options' => array('cache' => __DIR__ . '/../tmp/cache/twig')
-        )));
 
         // Web request / response
         $di->set('pollo/web:request', $di->lazyNew('Pollo\Web\Http\Request', array(
@@ -143,7 +135,8 @@ class Common extends Config
     {
         return array(
             new Home(),
-            new Poll()
+            new Poll(),
+            new CallForProposals()
         );
     }
 
