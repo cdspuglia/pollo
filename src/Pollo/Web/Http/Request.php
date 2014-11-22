@@ -32,4 +32,12 @@ final class Request implements RequestInterface
     {
         return $this->request->post->get($key, $alt);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getParam($key)
+    {
+        return $this->request->params[$key];
+    }
 }

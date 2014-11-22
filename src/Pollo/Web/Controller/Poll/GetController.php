@@ -8,8 +8,8 @@ final class GetController extends Controller
 {
     public function __invoke()
     {
-        $pollId = $this->request->getQuery('id');
-
-        // fetch through repository
+        $pollId = $this->getRequest()->getParam('id');
+        $content = $this->renderResponse('Poll/index.html.twig', array('id' => $pollId));
+        $this->getResponse()->setContent($content);
     }
 }

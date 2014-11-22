@@ -2,12 +2,14 @@
 
 namespace Pollo\Web\Controller;
 
+use Monolog\Logger;
 use Pollo\Adapter\AdapterInterface;
 use Pollo\Adapter\Command\CommandInterface;
 use Pollo\Web\Http\RequestInterface;
 use Pollo\Web\Http\ResponseInterface;
 use Pollo\Web\Router\RouterInterface;
 use Pollo\Web\Templating\TemplateEngineInterface;
+use Aura\Accept\AcceptFactory;
 
 abstract class Controller
 {
@@ -25,6 +27,9 @@ abstract class Controller
 
     /** @var AdapterInterface */
     private $domain;
+
+    CONST APPLICATION_JSON = 'application/json';
+    CONST TEXT_HTML = 'text/html';
 
     /**
      * @param RequestInterface $request
@@ -90,8 +95,58 @@ abstract class Controller
      * @param array $parameters
      * @return string
      */
-    protected function renderTemplate($template, array $parameters = array())
+    private function renderTemplate($template, array $parameters = array())
     {
         return $this->templating->render($template, $parameters);
+    }
+
+
+    /**
+     * Returns a json containing parameters
+     *
+     * @param array $parameters
+     * @return string
+     */
+    private function renderJson(array $parameters)
+    {
+        $jsonResponse =  json_encode($parameters);
+        $this->response->setHeaders(array('Content-Type' => self::APPLICATION_JSON));
+        return $jsonResponse;
+    }
+
+    /**
+     * Renders the response depending on Accept HTTP header
+     *
+     * @param $response
+     * @param array $parameters
+     * @return string
+     */
+    protected function renderResponse($response, array $parameters = array())
+    {
+        $negotiatedMedia = $this->getNegotiatedMedia();
+        if ($negotiatedMedia == self::APPLICATION_JSON)
+        {
+            return $this->renderJson($parameters);
+        }
+        else if ($negotiatedMedia == self::TEXT_HTML)
+        {
+            return $this->renderTemplate($response, $parameters);
+        }
+    }
+
+    /**
+     * Returns the negotiated media
+     *
+     * @return string
+     */
+    private  function getNegotiatedMedia()
+    {
+        $available = array(
+            self::APPLICATION_JSON,
+            self::TEXT_HTML,
+        );
+        $accept_factory = new AcceptFactory($_SERVER);
+        $accept = $accept_factory->newInstance();
+        return $accept->negotiateMedia($available)->getValue();
     }
 }
