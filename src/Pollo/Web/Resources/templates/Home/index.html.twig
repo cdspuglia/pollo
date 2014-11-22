@@ -1,1 +1,34 @@
-<h1>{{ 'Pollo homepage' }}</h1>
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">Hot Topics</h3>
+        </div>
+        <br/>
+        {% for topic in hotTopics %}
+            <div class="panel-body">
+                {{ topic.description }}
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
+
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Topics</h3>
+        </div>
+        <br/>
+        {% for topic in topics %}
+            <div class="panel-body">
+                {{ topic.description }}
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+

@@ -32,6 +32,15 @@ final class Poll implements RouteCollectionInterface
                     'text/html'
                 )
             );
+
+        $router->addGet('poll.new', '/poll/new')
+            ->setValues(array('action' => 'poll.new'))
+            ->setAccept(
+                array(
+                    'application/json',
+                    'text/html'
+                )
+            );
     }
 
     /**
@@ -41,7 +50,8 @@ final class Poll implements RouteCollectionInterface
     {
         return array(
             'poll.get' => 'Pollo\Web\Controller\Poll\GetController',
-            'poll.create' => 'Pollo\Web\Controller\Poll\CreateController'
+            'poll.create' => 'Pollo\Web\Controller\Poll\CreateController',
+            'poll.new' => 'Pollo\Web\Controller\Poll\NewController',
         );
     }
 }

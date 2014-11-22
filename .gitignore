@@ -1,3 +1,7 @@
+.DS_Store
+
+web/assets/bower_components/
+
 /bin
 /vendor
 

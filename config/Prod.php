@@ -9,7 +9,6 @@ class Prod extends Config
 {
     public function define(Container $di)
     {
-
     }
 
     public function modify(Container $di)
