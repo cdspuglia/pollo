@@ -1,0 +1,26 @@
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/bower_components/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+    <link href="/assets/bower_components/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+{% include "Partials/navbar.html.twig" %}
+
+<div class="container">
+
+    <!-- Your site -->
+
+    <div id="content">{% block content %}{% endblock %}</div>
+
+    <!-- Your site ends -->
+</div>
+
+
+{% include "Partials/footer.html.twig" %}
+
+</body>
+
+</html>

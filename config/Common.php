@@ -4,6 +4,7 @@ namespace Pollo\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Pollo\Config\Routing\CallForProposals;
 use Pollo\Config\Routing\Home;
 use Pollo\Config\Routing\Poll;
 
@@ -134,7 +135,8 @@ class Common extends Config
     {
         return array(
             new Home(),
-            new Poll()
+            new Poll(),
+            new CallForProposals()
         );
     }
 
