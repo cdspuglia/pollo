@@ -1,7 +1,7 @@
 class php {
 
 # Install php5 packages
-  package { ['php5-fpm', 'php5-cli', 'php5-curl']:
+  package { ['php5-fpm', 'php5-cli', 'php5-curl', 'php5-xdebug']:
     ensure => present,
     require => Exec['apt-get update'],
   }
