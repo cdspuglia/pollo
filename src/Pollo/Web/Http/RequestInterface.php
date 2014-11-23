@@ -21,4 +21,10 @@ interface RequestInterface
      * @return mixed
      */
     public function getPost($key, $alt = null);
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function getParam($key);
 }
