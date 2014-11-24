@@ -8,7 +8,7 @@ final class GetController extends Controller
 {
     public function __invoke()
     {
-        $pollId = $this->request->getQuery('id');
+        $pollId = $this->getRequest()->getQuery('id');
 
         // fetch through repository
     }
