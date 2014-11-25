@@ -3,13 +3,9 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/bower_components/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
     <link href="/assets/bower_components/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
-<<<<<<< HEAD
     <link href="/assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
-=======
-
     <link href="/assets/css/layout.css" rel="stylesheet">
->>>>>>> a983f3c... Added css files and fixed behat tests
 </head>
 
 <body>
@@ -18,26 +14,21 @@
 
 <div class="container">
 
-    <!-- Your site -->
-
     <div id="content">{% block content %}{% endblock %}</div>
 
-    <!-- Your site ends -->
 </div>
-
-<<<<<<< HEAD
-=======
 
 {% include "Partials/actionbar.html.twig" %}
 
->>>>>>> a983f3c... Added css files and fixed behat tests
 {% include "Partials/footer.html.twig" %}
+
 <script>
     $(document).ready(function () {
         $.material.init();
         {% block jsToExecuteOnDocumentReady %}{% endblock %}
     });
 </script>
+
 </body>
 
 </html>
