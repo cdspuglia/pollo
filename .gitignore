@@ -3,7 +3,6 @@
 
 EventStore-*/
 
-composer.lock
 composer.phar
 
 web/assets/bower_components/
