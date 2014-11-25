@@ -31,12 +31,14 @@
 	                <button type="submit" class="btn btn-primary">Inserisci</button>
 	            </div>
 	        </div>
-
 	    </fieldset>
 	</form>
 </div>
 
+{% endblock %}
 
+{% block jsToExecuteOnDocumentReady %}
+	$('#datetimepicker1').datetimepicker();
 {% endblock %}
 
 
