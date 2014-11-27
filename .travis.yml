@@ -13,6 +13,9 @@ addons:
     hosts:
         - pollo.local
 
+services:
+    - elasticsearch
+
 before_script:
     # enable virtual display
     - export DISPLAY=:99.0

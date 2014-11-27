@@ -1,4 +1,5 @@
 exec { 'apt-get update':
+  user => root,
   path => '/usr/bin',
 }
 
@@ -17,4 +18,4 @@ exec { 'add-pollo-host':
   path => ['/bin'];
 }
 
-include git, nginx, php, eventstore
+include java, git, nginx, php, eventstore, elasticsearch
