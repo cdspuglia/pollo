@@ -14,18 +14,16 @@ final class Poll implements RouteCollectionInterface
      */
     public function addTo(Router $router)
     {
-        $router->addGet('poll.get', '/poll/{id}')
+        $router->addGet('poll.get', '/poll/create')
             ->setValues(array('action' => 'poll.get'))
-            ->addTokens(array('id' => Uuid::VALID_PATTERN))
             ->setAccept(
                 array(
-                    'application/json',
                     'text/html'
                 )
             );
 
-        $router->addPost('poll.create', '/poll/create')
-            ->setValues(array('action' => 'poll.create'))
+        $router->addGet('poll.new', '/poll/new')
+            ->setValues(array('action' => 'poll.new'))
             ->setAccept(
                 array(
                     'application/json',
@@ -41,7 +39,8 @@ final class Poll implements RouteCollectionInterface
     {
         return array(
             'poll.get' => 'Pollo\Web\Controller\Poll\GetController',
-            'poll.create' => 'Pollo\Web\Controller\Poll\CreateController'
+            'poll.create' => 'Pollo\Web\Controller\Poll\CreateController',
+            'poll.new' => 'Pollo\Web\Controller\Poll\NewController',
         );
     }
 }

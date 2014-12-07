@@ -1,0 +1,30 @@
+{
+  "name": "pollo",
+  "version": "0.1.x-dev",
+  "homepage": "https://github.com/cdspuglia/pollo",
+  "authors": [
+    "Club Degli Sviluppatori - Puglia"
+  ],
+  "description": "Polling system by Club degli Sviluppatori Puglia",
+  "main": "web/index.php",
+  "keywords": [
+    "pollo",
+    "polling",
+    "vote",
+    "cds",
+    "call-for-proposal"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-material-design": "~0.1.6",
+    "eonasdan-bootstrap-datetimepicker" : "3.1"
+  }
+}

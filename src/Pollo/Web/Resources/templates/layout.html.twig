@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/bower_components/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+    <link href="/assets/bower_components/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
+    <link href="/assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/assets/css/layout.css" rel="stylesheet">
+</head>
+
+<body>
+
+{% include "Partials/navbar.html.twig" %}
+
+<div class="container">
+
+    <div id="content">{% block content %}{% endblock %}</div>
+
+</div>
+
+{% include "Partials/actionbar.html.twig" %}
+
+{% include "Partials/footer.html.twig" %}
+
+<script>
+    $(document).ready(function () {
+        $.material.init();
+        {% block jsToExecuteOnDocumentReady %}{% endblock %}
+    });
+</script>
+
+</body>
+
+</html>
